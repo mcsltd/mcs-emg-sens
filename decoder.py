@@ -50,7 +50,7 @@ class Decoder:
                         gyro[ch - 4][idx_sample] = val
 
         e_emg *= Constants.EmgResolution
-        accel *= Constants.AccResolution * (self.settings.FullScaleAccelerometer + 1)
-        gyro *= Constants.GyroResolution * (self.settings.FullScaleGyroscope + 1)
+        accel *= Constants.AccResolution * (2 ** self.settings.FullScaleAccelerometer)
+        gyro *= Constants.GyroResolution * (2 ** self.settings.FullScaleGyroscope)
 
         return counter, e_emg, accel, gyro
