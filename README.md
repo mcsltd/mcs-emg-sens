@@ -12,7 +12,7 @@ To run, you need a .env file with a key for signing data and control EMGsens. Yo
 
 ## Dependencies
 
-For running app make
+Please, install library:
 
 ```commandline
 pip install -r requirements.txt
