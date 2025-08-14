@@ -1,4 +1,5 @@
 import ctypes
+from enum import IntFlag, auto
 
 
 class BatteryProperties(ctypes.Structure):
@@ -23,6 +24,7 @@ class Settings(ctypes.Structure):
         ("EnabledEvents", ctypes.c_uint16),
         ("ActivityThreshold", ctypes.c_uint16),
     ]
+
 
 
 class AngularRate(ctypes.Structure):
@@ -60,13 +62,3 @@ class RGB(ctypes.Structure):
         ("B", ctypes.c_uint8),
     ]
 
-
-class EnabledChannels(ctypes.Structure):
-    EMG = 0
-    eEMG = 0
-    X = 0
-    Y = 0
-    Z = 0
-    P = 0
-    R = 0
-    YAW = 0

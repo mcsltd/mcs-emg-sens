@@ -2,7 +2,25 @@ from dataclasses import dataclass
 from functools import cached_property
 from uuid import UUID
 
-from enum import Enum, IntEnum
+from enum import Enum, IntEnum, IntFlag, auto
+
+UUID_TEMPLATE = "0000{:0>4x}-0000-1000-8000-00805f9b34fb"
+
+class DeviceInformationService(IntEnum):
+    MANUFACTURER_NAME = 0x2A29
+    MODEL = 0x2A24
+    SERIAL = 0x2A25
+    FIRMWARE = 0x2A26
+    HARDWARE = 0x2A27
+
+    @cached_property
+    def uuid(self) -> UUID:
+        """Convert the ID to a full UUID and cache."""
+        return UUID(UUID_TEMPLATE.format(self.value))
+
+    def __str__(self) -> str:
+        """Convert UUID to string value."""
+        return str(self.uuid)
 
 
 @dataclass(slots=True, frozen=True)
@@ -49,31 +67,30 @@ class ScaleGyro(Enum):
     DPS_1000 = 3
 
 
-class EventType(Enum):
-    BUTTON = 0
-    ACTIVITY = 1
-    FREEFALL = 2
-    ORIENTATION = 3
-    START = 4
-    CHARGE = 5
+class Channel(IntFlag):
+    DISABLE = 0
+    EMG = auto()    # 0b00000001
+    eEMG = auto()   # 0b00000010
+    X = auto()      # 0b00000100
+    Y = auto()      # 0b00001000
+    Z = auto()      # 0b00010000
+    P = auto()      # 0b00100000
+    R = auto()      # 0b01000000
+    YAW = auto()    # 0b10000000
+
+# example
+# channels = Channel.EMG | Channel.X | Channel.Y | Channel.Z | Channel.P | Channel.R | Channel.YAW
 
 
-UUID_TEMPLATE = "0000{:0>4x}-0000-1000-8000-00805f9b34fb"
+class EventType(IntFlag):
+    DISABLE = 0
+    BUTTON = auto()         # 0b00000001
+    ACTIVITY = auto()       # 0b00000010
+    FREEFALL = auto()       # 0b00000100
+    ORIENTATION = auto()    # 0b00001000
+    START = auto()          # 0b00010000
+    CHARGE = auto()         # 0b00100000
 
-
-class DeviceInformationService(IntEnum):
-    MANUFACTURER_NAME = 0x2A29
-    MODEL = 0x2A24
-    SERIAL = 0x2A25
-    FIRMWARE = 0x2A26
-    HARDWARE = 0x2A27
-
-    @cached_property
-    def uuid(self) -> UUID:
-        """Convert the ID to a full UUID and cache."""
-        return UUID(UUID_TEMPLATE.format(self.value))
-
-    def __str__(self) -> str:
-        """Convert UUID to string value."""
-        return str(self.uuid)
+# example
+# events = EventType.BUTTON | EventType.ACTIVITY | EventType.FREEFALL | EventType.ORIENTATION | EventType.START | EventType.CHARGE
 

@@ -8,7 +8,7 @@ from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QMainWindow, QApplication, QMessageBox
 from pyqtgraph import LegendItem
 
-from constants import SamplingRate
+from constants import SamplingRate, EventType, Channel
 from device import EMGSens, find_device
 from structures import Settings
 from ui.main_window import Ui_MainWindow
@@ -112,8 +112,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 AveragingWindowEMG=10,
                 FullScaleAccelerometer=self.comboBoxAccelerometerScale.currentData(),
                 FullScaleGyroscope=self.comboBoxGyroscopeScale.currentData(),
-                EnabledChannels=252,
-                EnabledEvents=1,
+                EnabledChannels=Channel.X | Channel.Y | Channel.Z | Channel.P | Channel.R | Channel.YAW,
+                EnabledEvents=EventType.BUTTON,
                 ActivityThreshold=1
             )
         await self.device.get_data(settings=settings, data_queue=self.data_queue)
